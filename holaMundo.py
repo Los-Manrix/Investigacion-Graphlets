@@ -1,6 +1,6 @@
 import os
 
-carpeta = r"C:\Users\benja\Desktop\ManrixPack\ConversionDeMatrices\networks"
+carpeta = r"C:\Users\xxx\Desktop\xxxx\ConversionDeMatrices\networks"
 archivo_txt = "elec.txt"
 ruta = os.path.join(carpeta, archivo_txt)
 
