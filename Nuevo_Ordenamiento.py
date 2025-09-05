@@ -1,35 +1,42 @@
-ruta = r"C:\Users\xxx\OneDrive\Escritorio\xxx\ConversionDeMatrices\networks\social.txt"
+def procesar_pares(nombre_archivo):
+    lista1 = []  # pares que aparecen una vez
+    lista2 = []  # pares que aparecen dos veces
 
-pares_tipo1 = set()
-pares_tipo2 = set()
+    with open(nombre_archivo, "r") as f:
+        for linea in f:
+            # limpiar la línea
+            partes = linea.strip().split()
+            if len(partes) != 2:
+                continue  # saltar si no tiene exactamente 2 números
 
-lineas_salida = []
+            a, b = map(int, partes)
+            par = (a, b)
+            par_inv = (b, a)
 
-with open(ruta, "r", encoding="utf-8", errors="ignore") as f:
-    for line in f:
-        nums = line.strip().split()
-        if len(nums) != 2:
-            continue
-        a, b = int(nums[0]), int(nums[1])
-        par = (a, b)
-        par_inv = (b, a)
+            # Revisar si par o invertido está en lista1
+            if par in lista1 or par_inv in lista1:
+                if par in lista1:
+                    lista1.remove(par)
+                else:
+                    lista1.remove(par_inv)
+                lista2.append(par)
+            elif par not in lista2 and par_inv not in lista2:
+                lista1.append(par)
 
-        if par not in pares_tipo1 and par_inv not in pares_tipo1:
-            # Par nuevo, tipo 1
-            lineas_salida.append((a, b, 1))
-            pares_tipo1.add(par)
-        elif par_inv in pares_tipo1 and par not in pares_tipo2:
-            # Aparece inverso, tipo 2
-            lineas_salida.append((a, b, 2))
-            pares_tipo2.add(par)
-            # Añadimos tipo 3 solo para este par tipo 2
-            lineas_salida.append((a, b, 3))
-        else:
-            # Si par ya fue tipo 1 o 2, ignorar repetidos
-            pass
+    # Imprimir resultados
+    for par in lista1:
+        a, b = par
+        print(a, b, 1)
+        print(b, a, 2)
 
-for a, b, t in lineas_salida:
-    print(a, b, t)
+    for par in lista2:
+        a, b = par
+        print(a, b, 3)
+        print(b, a, 3)
+
+
+ruta = r"C:\Users\benja\Desktop\ManrixPack\ConversionDeMatrices\networks\manrix.txt"
+procesar_pares(ruta)
 
 """
 ===================================================================================
