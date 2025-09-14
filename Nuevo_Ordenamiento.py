@@ -37,7 +37,7 @@ def procesar_pares(nombre_archivo, salida_txt):
 
 
 # Rutas de entrada y salida
-entrada = r"C:\Users\benja\Desktop\ManrixPack\ConversionDeMatrices\networks\manrix.txt"
-salida = r"C:\Users\benja\Desktop\ManrixPack\ConversionDeMatrices\networks\resultado.txt"
+entrada = r"C:\Users\xxx\Desktop\xxx\ConversionDeMatrices\networks\manrix.txt"
+salida = r"C:\Users\xxx\Desktop\xxx\ConversionDeMatrices\networks\resultado.txt"
 
 procesar_pares(entrada, salida)
