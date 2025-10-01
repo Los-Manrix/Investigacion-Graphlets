@@ -22,6 +22,6 @@ Explicación comando desde consola:
 Parámetros clave:
 
 -i: Ruta del archivo de red de entrada
--s:Tamaño del motivo (tamaño del subgráfico)
--r:Número de gráficos aleatorios para pruebas estadísticas
+-s:Tamaño del motivo (tamaño del subgrafo)
+-r:Número de grafos aleatorios para pruebas estadísticas
 -o: Directorio de salida de resultados
