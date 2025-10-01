@@ -15,3 +15,13 @@ Yeast:
 - 1079 Aristas
 - Grado Maximo de un nodo fue de 71
 - Numero de Sub Grafos (motivos de tamaño 4): 183174
+
+Explicación comando desde consola:
+
+./kavosh -i input_network.txt -s 4 -r 1000 -o results/
+Parámetros clave:
+
+-i: Ruta del archivo de red de entrada
+-s:Tamaño del motivo (tamaño del subgráfico)
+-r:Número de gráficos aleatorios para pruebas estadísticas
+-o: Directorio de salida de resultados
