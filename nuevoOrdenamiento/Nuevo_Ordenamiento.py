@@ -7,7 +7,7 @@ num_nodos = 0  # Número de nodos declarado en el archivo
 conteo_tipos = {1: 0, 2: 0, 3: 0}  # Contador de cada tipo de conexión
 
 
-def procesar_pares(nombre_archivo: str) -> str:
+def procesar_pares(nombre_archivo: str) -> None:
     """
     Procesa un archivo con pares de nodos y genera un archivo de salida que incluye:
     - Resumen: número de nodos, aristas y cantidad de cada tipo de conexión.
@@ -21,8 +21,6 @@ def procesar_pares(nombre_archivo: str) -> str:
     global conteo_tipos
 
     # Generar nombre del archivo de salida agregando "_procesado" al nombre original
-    base, _ = os.path.splitext(nombre_archivo)
-    salida_txt = f"{base}_procesado.txt"
 
     # Abrir archivo original para lectura
     with open(nombre_archivo, "r") as f:
@@ -59,11 +57,20 @@ def procesar_pares(nombre_archivo: str) -> str:
         conteo_tipos[2] += 1  # Tipo 2: par invertido
     for _ in lista2:
         conteo_tipos[3] += 2  # Tipo 3: ambos sentidos del par
-    return salida_txt
+    return
 
 
-def escritura(salida: str) -> void:
-    with open(salida, "w") as f_out:
+def escritura(salida: str) -> None:
+    global lista1
+    global lista2
+    global aristas
+    global num_nodos
+    global num_nodos
+    global conteo_tipos
+
+    salida_txt = f"{salida}_procesado.txt"
+
+    with open(salida_txt, "w") as f_out:
         # Resumen al inicio del archivo
         f_out.write(f"Nodos: {num_nodos}\n")
         f_out.write(f"Aristas: {aristas}\n")
@@ -83,11 +90,13 @@ def escritura(salida: str) -> void:
     return
 
 
-def run() -> void:
-    ruta = "../networks/standards/"
+def run() -> None:
+    ruta = "./networks/standards"
+    counter = 0
     for file in os.listdir(ruta):
         ruta_comp = os.path.join(ruta, file)
         if os.path.isfile(ruta_comp):
-            salida = procesar_pares(ruta_comp)
-            escritura(salida)
+            procesar_pares(ruta_comp)
+            escritura(f"./outs/matrix{counter}")
+            counter =+ 1
     return

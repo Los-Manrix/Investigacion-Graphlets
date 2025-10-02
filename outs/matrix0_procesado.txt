@@ -1,0 +1,6 @@
+Nodos: 325140
+Aristas: 0
+Tipo 1: 0
+Tipo 2: 0
+Tipo 3: 0
+

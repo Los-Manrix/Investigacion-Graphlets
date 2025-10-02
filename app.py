@@ -1,5 +1,5 @@
-from conversion-formato import conversion-fromato as conv
-from nuevo-ordenamiento import Nuevo_Ordenamiento as new_ord
+from convercionFormato import convercion_formato as conv
+from nuevoOrdenamiento import Nuevo_Ordenamiento as new_ord
 
 def main():
     conv.run()

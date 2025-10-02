@@ -4,7 +4,7 @@ n_nodos = 0
 arcos_a = []
 
 
-def index(file: str, index: str) -> void:
+def index(file: str, index: str) -> None:
     global n_nodos
     global arcos
     global arcos_a
@@ -36,10 +36,11 @@ def index(file: str, index: str) -> void:
     return dic
 
 
-def conversion(file: str, matrix: str, i_dic: dict) -> void:
+def conversion(file: str, matrix: str, i_dic: dict) -> None:
     final = []
+
     with open(file, 'r') as f:
-        for i in arcos_a[1:len(abc)]:
+        for i in arcos_a[1:len(arcos_a)]:
             final.append([i_dic[i[0]], i_dic[i[1]]])
 
     with open(matrix, 'w') as m:
@@ -51,13 +52,13 @@ def conversion(file: str, matrix: str, i_dic: dict) -> void:
     return
 
 
-def run() -> void:
-    ruta = '../networks/weird/'
+def run() -> None:
+    ruta = './networks/weird'
     counter = 0
     for file in os.listdir(ruta):
         ruta_comp = os.path.join(ruta, file)
         if os.path.isfile(ruta_comp):
-            i_dic = index(ruta_comp, f"../index/index{counter}.txt")
-            conversion(ruta_comp, f"../networks/standards/matrix{counter}.txt", i_dic)
+            i_dic = index(ruta_comp, f"./index/index{counter}.txt")
+            conversion(ruta_comp, f"./networks/standards/matrix{counter}.txt", i_dic)
             counter += 1
     return
