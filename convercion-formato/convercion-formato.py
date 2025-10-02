@@ -2,7 +2,9 @@ import os
 
 n_nodos = 0
 arcos_a = []
-def index(file: str, index: str):
+
+
+def index(file: str, index: str) -> void:
     global n_nodos
     global arcos
     global arcos_a
@@ -34,7 +36,7 @@ def index(file: str, index: str):
     return dic
 
 
-def conversion(file: str, matrix: str, i_dic: dict):
+def conversion(file: str, matrix: str, i_dic: dict) -> void:
     final = []
     with open(file, 'r') as f:
         for i in arcos_a[1:len(abc)]:
@@ -49,7 +51,7 @@ def conversion(file: str, matrix: str, i_dic: dict):
     return
 
 
-def run():
+def run() -> void:
     ruta = '../networks/weird/'
     counter = 0
     for file in os.listdir(ruta):
