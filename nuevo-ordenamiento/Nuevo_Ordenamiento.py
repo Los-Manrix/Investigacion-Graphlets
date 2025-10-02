@@ -1,16 +1,24 @@
 import os
 
-def procesar_pares(nombre_archivo):
+lista1 = []  # Pares que aparecen solo una vez (tipo 1 y su inverso tipo 2)
+lista2 = []  # Pares que aparecen dos veces o más (tipo 3)
+aristas = 0  # Contador de todas las aristas leídas
+num_nodos = 0  # Número de nodos declarado en el archivo
+conteo_tipos = {1: 0, 2: 0, 3: 0}  # Contador de cada tipo de conexión
+
+
+def procesar_pares(nombre_archivo: str) -> str:
     """
     Procesa un archivo con pares de nodos y genera un archivo de salida que incluye:
     - Resumen: número de nodos, aristas y cantidad de cada tipo de conexión.
     - Listado de pares de nodos con su tipo (1, 2 o 3) según cómo aparezcan.
     """
-    lista1 = []  # Pares que aparecen solo una vez (tipo 1 y su inverso tipo 2)
-    lista2 = []  # Pares que aparecen dos veces o más (tipo 3)
-    aristas = 0  # Contador de todas las aristas leídas
-    num_nodos = 0  # Número de nodos declarado en el archivo
-    conteo_tipos = {1: 0, 2: 0, 3: 0}  # Contador de cada tipo de conexión
+    global lista1
+    global lista2
+    global aristas
+    global num_nodos
+    global num_nodos
+    global conteo_tipos
 
     # Generar nombre del archivo de salida agregando "_procesado" al nombre original
     base, _ = os.path.splitext(nombre_archivo)
@@ -51,9 +59,11 @@ def procesar_pares(nombre_archivo):
         conteo_tipos[2] += 1  # Tipo 2: par invertido
     for _ in lista2:
         conteo_tipos[3] += 2  # Tipo 3: ambos sentidos del par
+    return salida_txt
 
-    # Escribir archivo de salida con resumen y listado de pares
-    with open(salida_txt, "w") as f_out:
+
+def escritura(salida: str) -> void:
+    with open(salida, "w") as f_out:
         # Resumen al inicio del archivo
         f_out.write(f"Nodos: {num_nodos}\n")
         f_out.write(f"Aristas: {aristas}\n")
@@ -70,13 +80,14 @@ def procesar_pares(nombre_archivo):
         for a, b in lista2:
             f_out.write(f"{a}\t{b}\t3\n")
             f_out.write(f"{b}\t{a}\t3\n")  # Ambos sentidos
+    return
 
-def run():
+
+def run() -> void:
     ruta = "../networks/standards/"
-    counter = 0
     for file in os.listdir(ruta):
         ruta_comp = os.path.join(ruta, file)
         if os.path.isfile(ruta_comp):
-            procesar_pares(ruta_comp, f"../outs/salida{counter}.txt")
-            counter += 1
+            salida = procesar_pares(ruta_comp)
+            escritura(salida)
     return
