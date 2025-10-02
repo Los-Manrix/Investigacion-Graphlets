@@ -16,6 +16,7 @@ def index(file: str, index_file: str) -> dict:
     with open(file, 'r') as f:
         f.seek(0)
         lector = csv.reader(f, delimiter='\t')
+        next(lector)
         counter = 1
 
         for line in lector:
