@@ -71,6 +71,12 @@ def procesar_pares(nombre_archivo):
             f_out.write(f"{a}\t{b}\t3\n")
             f_out.write(f"{b}\t{a}\t3\n")  # Ambos sentidos
 
-# Ejecutar la función con el archivo de entrada
-entrada = "networks/manrix.txt"
-procesar_pares(entrada)
+def run():
+    ruta = "../networks/standards/"
+    counter = 0
+    for file in os.listdir(ruta):
+        ruta_comp = os.path.join(ruta, file)
+        if os.path.isfile(ruta_comp):
+            procesar_pares(ruta_comp, f"../outs/salida{counter}.txt")
+            counter += 1
+    return
