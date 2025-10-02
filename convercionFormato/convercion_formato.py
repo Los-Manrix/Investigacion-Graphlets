@@ -11,19 +11,19 @@ def index(file: str, index_file: str) -> dict:
 
     dic = {}
     abc_arcos = []
+    abc_nodos = []
 
     with open(file, 'r') as f:
-        contenido = f.read()
         f.seek(0)
         lector = csv.reader(f, delimiter='\t')
-
-        abc_nodos = contenido.split()
-        set_abc = set(abc_nodos)
         counter = 1
 
         for line in lector:
             if len(line) >= 2:
                 abc_arcos.append([line[0], line[1]])
+                abc_nodos.append(line[0])
+                abc_nodos.append(line[1])
+        set_abc = set(abc_nodos)
 
         for nodo in set_abc:
             dic[nodo] = counter
