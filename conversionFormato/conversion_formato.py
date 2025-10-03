@@ -1,5 +1,5 @@
 import os
-import csv
+import polars as pl
 
 n_nodos = 0
 arcos_a = []
@@ -9,31 +9,32 @@ def index(file: str, index_file: str) -> dict:
     global n_nodos
     global arcos_a
 
-    dic = {}
-    abc_arcos = []
-    abc_nodos = []
+    df = pl.read_csv(
+        file, 
+        separator="\t",
+        has_header=True,
+        infer_schema_length=0,
+        null_values=["-", "~", ""],
+        low_memory=True
+    )
 
-    with open(file, 'r') as f:
-        f.seek(0)
-        lector = csv.reader(f, delimiter='\t')
-        next(lector)
-        counter = 1
+    df_reduced = df.select(["UniprotID.TF", "UniprotID.Target"])
+    
+    col0 = df_reduced["UniprotID.TF"]
+    col1 = df_reduced["UniprotID.Target"]
 
-        for line in lector:
-            if len(line) >= 2:
-                abc_arcos.append([line[0], line[1]])
-                abc_nodos.append(line[0])
-                abc_nodos.append(line[1])
-        set_abc = set(abc_nodos)
+    abc_arcos = list(zip(col0, col1))
+    abc_nodos = col0 + col1
+    set_abc = set(abc_nodos)
 
-        for nodo in set_abc:
-            dic[nodo] = counter
-            counter += 1
+    dic = {nodo: i+1 for i, nodo in enumerate(set_abc)}
 
-    with open(index_file, 'w') as i:
-        i.write("Index  ID\n\n")
+    print("Lectura lista...")
+
+    with open(index_file, "w") as i:
+        i.write("Index\tID\n\n")
         for key, value in dic.items():
-            i.write(f"{value}      {key}\n")
+            i.write(f"{value}\t{key}\n")
 
     n_nodos = len(set_abc)
     arcos_a = abc_arcos
