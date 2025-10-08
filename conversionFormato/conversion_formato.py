@@ -56,8 +56,11 @@ def run():
     for file in os.listdir(ruta):
         ruta_comp = os.path.join(ruta, file)
         if os.path.isfile(ruta_comp):
-            i_dic, arcos_a, n_nodos = index(ruta_comp, f"./index/index{counter}.txt")
-            conversion(f"./networks/standards/matrix{counter}.txt", arcos_a, i_dic, n_nodos)
+            nombre_base = os.path.splitext(os.path.basename(file))[0]
+            salida = f"{nombre_base}"
+
+            i_dic, arcos_a, n_nodos = index(ruta_comp, f"./index/index_{salida}.txt")
+            conversion(f"./networks/standards/{salida}.txt", arcos_a, i_dic, n_nodos)
             counter += 1
 
 

@@ -75,6 +75,10 @@ def run():
         if os.path.isfile(ruta_comp):
             num_nodos, aristas, uni, bi, conteo = procesar_pares(ruta_comp)
 
+            nombre_base = os.path.splitext(os.path.basename(file))[0]
+            salida = f"./outs/{nombre_base}"
+
+            escritura(salida, num_nodos, aristas, uni, bi, conteo)
             counter += 1
         print(ruta_comp)
 
