@@ -1,14 +1,8 @@
 import os
 import polars as pl
 
-n_nodos = 0
-arcos_a = []
 
-
-def index(file: str, index_file: str) -> dict:
-    global n_nodos
-    global arcos_a
-
+def index(file: str, index_file: str):
     df = pl.read_csv(
         file, 
         separator="\t",
@@ -19,51 +13,53 @@ def index(file: str, index_file: str) -> dict:
     )
 
     df_reduced = df.select(["UniprotID.TF", "UniprotID.Target"])
-    
-    col0 = df_reduced["UniprotID.TF"]
-    col1 = df_reduced["UniprotID.Target"]
+    col0 = df_reduced["UniprotID.TF"].to_list()
+    col1 = df_reduced["UniprotID.Target"].to_list()
 
     abc_arcos = list(zip(col0, col1))
     abc_nodos = col0 + col1
     set_abc = set(abc_nodos)
 
-    dic = {nodo: i+1 for i, nodo in enumerate(set_abc)}
+    # Crear diccionario de índices
+    dic = {nodo: idx for idx, nodo in enumerate(set_abc, start=1)}
 
-    print("Lectura lista...")
+    print(f"Lectura lista: {len(set_abc)} nodos, {len(abc_arcos)} arcos")
 
-    with open(index_file, "w") as i:
-        i.write("Index\tID\n\n")
+    os.makedirs(os.path.dirname(index_file), exist_ok=True)
+    with open(index_file, "w") as f:
+        f.write("Index\tID\n")
         for key, value in dic.items():
-            i.write(f"{value}\t{key}\n")
+            f.write(f"{value}\t{key}\n")
 
-    n_nodos = len(set_abc)
-    arcos_a = abc_arcos
-
-    return dic
+    return dic, abc_arcos, len(set_abc)
 
 
-def conversion(file: str, matrix_file: str, i_dic: dict) -> None:
-    final = []
+def conversion(matrix_file: str, arcos_a: list, i_dic: dict, n_nodos: int):
+    os.makedirs(os.path.dirname(matrix_file), exist_ok=True)
 
-    for arco in arcos_a:
-        if arco[0] in i_dic and arco[1] in i_dic:
-            final.append([i_dic[arco[0]], i_dic[arco[1]]])
-
-    with open(matrix_file, 'w') as m:
+    with open(matrix_file, "w") as m:
         m.write(f"{n_nodos}\n")
-        m.write(f"{len(final)}\n")
-        for i in final:
-            m.write(f"{i[0]}        {i[1]}\n")
+        m.write(f"{len(arcos_a)}\n")
+        for a, b in arcos_a:
+            m.write(f"{i_dic[a]}\t{i_dic[b]}\n")
+
+    print(f"Archivo matriz escrito: {matrix_file}")
 
 
-
-def run() -> None:
+def run():
     ruta = './networks/weird'
     counter = 0
+
+    os.makedirs("./index", exist_ok=True)
+    os.makedirs("./networks/standards", exist_ok=True)
 
     for file in os.listdir(ruta):
         ruta_comp = os.path.join(ruta, file)
         if os.path.isfile(ruta_comp):
-            i_dic = index(ruta_comp, f"./index/index{counter}.txt")
-            conversion(ruta_comp, f"./networks/standards/matrix{counter}.txt", i_dic)
+            i_dic, arcos_a, n_nodos = index(ruta_comp, f"./index/index{counter}.txt")
+            conversion(f"./networks/standards/matrix{counter}.txt", arcos_a, i_dic, n_nodos)
             counter += 1
+
+
+if __name__ == "__main__":
+    run()
