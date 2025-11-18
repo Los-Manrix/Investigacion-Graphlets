@@ -1,9 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdio.h>      // printf, scanf, fopen, fscanf
+#include <stdlib.h>     // malloc, free, exit
+#include <string.h>     // memset
+#include <math.h>       // factorial, pow (si lo quieres)
 
 // ----------------------------------------------------
 // ESTRUCTURAS BASE
 // ----------------------------------------------------
+int** tipoArco;  // tipoArco[u][v] = tipo leído del archivo
 
 typedef struct Node Node;
 
@@ -20,6 +23,7 @@ struct Node {
     int tpc;
     Node* p;        // nodo padre
     AdjNode* adj;   // lista de sucesores
+    int t[4][4][4];
 };
 
 // Grafo
@@ -79,15 +83,22 @@ Node* Q_pop(Q* q) {
 // FUNCIONES AUXILIARES
 // ----------------------------------------------------
 
+double factorial(int n) {
+    if (n < 0) return 0;
+    return tgamma(n + 1);
+}
+
 int comb(int n, int k) {
-    if (k > n) return 0;
+    if (k < 0 || k > n) return 0;
     if (k == 0 || k == n) return 1;
-    return comb(n - 1, k - 1) + comb(n - 1, k);
+
+    double r = factorial(n) / (factorial(k) * factorial(n - k));
+
+    return (int)(r + 0.5);
 }
 
 int t(Node* a, Node* b) {
-    printf("t(%d, %d)\n", a->id, b->id);
-    return 1; // simbólico
+    return tipoArco[a->id][b->id];
 }
 
 
@@ -116,19 +127,23 @@ void search_motif_driver(Graph* G) {
 }
 
 void search_motif(Graph* G, Node* s, int iter) {
+
+    // 1) Inicializar
+    memset(s->t, 0, sizeof(s->t));
     Q* q = crearQ();
     s->p = NULL;
-    s->color = 1; // rojo
+    s->color = 1;     // rojo
 
-    int n1 = 0, n2 = 0, n3 = 0;//tipos de arco (cantidad)
+    int n1 = 0, n2 = 0, n3 = 0;
     AdjNode* adj;
 
-    // Para todo n sucesor de s
+    // 2) Primera pasada: procesar sucesores directos de s
     for (adj = s->adj; adj != NULL; adj = adj->next) {
+
         Node* n = adj->dest;
 
-        if (n->color != 1) {
-            n->tpc = t(s, n);
+        if (n->color != 1) {      // n no rojo
+            n->tpc = t(s, n);     // tipo(s,n)
 
             if (n->tpc == 1) n1++;
             if (n->tpc == 2) n2++;
@@ -138,35 +153,56 @@ void search_motif(Graph* G, Node* s, int iter) {
             Q_insert(q, n);
         }
     }
+    printf("%i\n",n1);
+    printf("%i\n",n2);
+    printf("%i\n",n3);
 
-    // combinaciones (según pseudocódigo)
-    printf("s.t(1,0,1) = comb(%d,2)\n", n1);
-    printf("s.t(2,0,2) = comb(%d,2)\n", n2);
-    printf("s.t(3,0,3) = comb(%d,2)\n", n3);
+    // 3) S.t(x,0,y) combinatorias iniciales
+    int t11 = comb(n1, 2);
+    int t22 = comb(n2, 2);
+    int t33 = comb(n3, 2);
 
-    printf("s.t(1,0,2) = comb(%d,2) - ...\n", n1 + n2);
-    printf("s.t(1,0,3) = comb(%d,2) - ...\n", n1 + n3);
-    printf("s.t(2,0,3) = comb(%d,2) - ...\n", n2 + n3);
+    s->t[1][0][1] = t11;
+    s->t[2][0][2] = t22;
+    s->t[3][0][3] = t33;
+
+    s->t[1][0][2] = comb(n1 + n2, 2) - t11 - t22;
+    s->t[1][0][3] = comb(n1 + n3, 2) - t11 - t33;
+    s->t[2][0][3] = comb(n2 + n3, 2) - t22 - t33;
 
 
+
+
+    // 4) Recorrido BFS y correcciones
     while (!Q_vacia(q)) {
+
         s = Q_pop(q);
         s->iter = iter;
+        s->color = 1;             // ahora es rojo
 
         for (adj = s->adj; adj != NULL; adj = adj->next) {
+
             Node* n = adj->dest;
 
             if (n->color != 1 && n->iter != iter) {
+
                 if (n->p == s->p) {
-                    printf("Caso igual: s.p.t(%d,0,%d)-- y ++\n", s->tpc, n->tpc);
+
+                    // caso igual
+                    s->p->t[s->tpc][0][n->tpc]--;
+                    s->p->t[s->tpc][ t(s,n) ][n->tpc]++;
+
                 } else {
-                    printf("Caso distinto: s.p.t(%d,%d,0)++\n", s->tpc, t(s, n));
+
+                    // caso distinto
+                    s->p->t[s->tpc][ t(s,n) ][0]++;
                 }
             }
         }
     }
 
     free(q);
+
 }
 
 // ----------------------------------------------------
@@ -174,6 +210,7 @@ void search_motif(Graph* G, Node* s, int iter) {
 // ----------------------------------------------------
 
 int main() {
+    int i;
     char nombreArchivo[100];
     printf("Ingrese el nombre del archivo del grafo: ");
     scanf("%s", nombreArchivo);
@@ -190,8 +227,12 @@ int main() {
     Graph G;
     G.num_nodos = num_nodos;
     G.nodos = (Node**)malloc(sizeof(Node*) * num_nodos);
+    tipoArco = malloc((num_nodos + 1) * sizeof(int*));
+    for (i = 1; i <= num_nodos; i++) {
+        tipoArco[i] = calloc(num_nodos + 1, sizeof(int));
+    }
 
-    int i;
+
     for (i = 0; i < num_nodos; i++) {
         G.nodos[i] = (Node*)malloc(sizeof(Node));
         G.nodos[i]->id = i + 1;
@@ -200,18 +241,22 @@ int main() {
         G.nodos[i]->tpc = 0;
         G.nodos[i]->p = NULL;
         G.nodos[i]->adj = NULL;
+
+
     }
 
     for (i = 0; i < num_aristas; i++) {
         int origen, destino, tipo;
         fscanf(f, "%d %d %d", &origen, &destino, &tipo);
-        agregarArista(G.nodos[origen - 1], G.nodos[destino - 1]);
-        agregarArista(G.nodos[destino-1],G.nodos[origen-1]);
-    }
 
+
+        tipoArco[origen][destino] = tipo;
+        agregarArista(G.nodos[origen - 1], G.nodos[destino - 1]);
+    }
     fclose(f);
 
     search_motif_driver(&G);
+
 
     for (i = 0; i < G.num_nodos; i++) {
         AdjNode* adj = G.nodos[i]->adj;
