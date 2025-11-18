@@ -117,86 +117,131 @@ void agregarArista(Node* origen, Node* destino) {
 void search_motif_driver(Graph* G);
 void search_motif(Graph* G, Node* s, int iter);
 
-void search_motif_driver(Graph* G) {
-    int iter = 1;
-    int i;
-    for (i = 0; i < G->num_nodos; i++) {
-        search_motif(G, G->nodos[i], iter);
-        iter++;
+// Función para imprimir la matriz de combinaciones de un nodo
+void imprimir_combinaciones(Node* n) {
+    printf("\n  Matriz t[x][y][z] para nodo %d:\n", n->id);
+    int x, y, z;
+    for (x = 1; x < 4; x++) {
+        for (y = 0; y < 4; y++) {
+            for (z = 1; z < 4; z++) {
+                if (n->t[x][y][z] > 0) {
+                    printf("    t[%d][%d][%d] = %d\n", x, y, z, n->t[x][y][z]);
+                }
+            }
+        }
     }
 }
 
-void search_motif(Graph* G, Node* s, int iter) {
+void search_motif_driver(Graph* G) {
+    int iter = 1;
+    int i, j;
+    printf("========================================\n");
+    printf("INICIANDO BÚSQUEDA DE MOTIFS\n");
+    printf("========================================\n");
+    
+    for (i = 0; i < G->num_nodos; i++) {
+        // Reset de iteración para todos los nodos
+        for (j = 0; j < G->num_nodos; j++) {
+            G->nodos[j]->iter = 0;
+            G->nodos[j]->color = 0;
+        }
+        search_motif(G, G->nodos[i], iter);
+        iter++;
+    }
+    
+    printf("\n========================================\n");
+    printf("RESULTADOS FINALES\n");
+    printf("========================================\n");
+    
+    // Imprimir resultados de cada nodo
+    for (i = 0; i < G->num_nodos; i++) {
+        imprimir_combinaciones(G->nodos[i]);
+    }
+}
+
+void search_motif(Graph* G, Node* root, int iter) {
 
     // 1) Inicializar
-    memset(s->t, 0, sizeof(s->t));
+    memset(root->t, 0, sizeof(root->t));
     Q* q = crearQ();
-    s->p = NULL;
-    s->color = 1;     // rojo
+    root->p = NULL;
+    root->color = 1;     // rojo (visitado)
+    root->iter = iter;
 
     int n1 = 0, n2 = 0, n3 = 0;
     AdjNode* adj;
+    Node* current_node;
 
-    // 2) Primera pasada: procesar sucesores directos de s
-    for (adj = s->adj; adj != NULL; adj = adj->next) {
+    printf("\n=== Búsqueda desde nodo %d ===\n", root->id);
 
+    // 2) Primera pasada: procesar sucesores directos de root
+    for (adj = root->adj; adj != NULL; adj = adj->next) {
         Node* n = adj->dest;
 
-        if (n->color != 1) {      // n no rojo
-            n->tpc = t(s, n);     // tipo(s,n)
+        if (n->iter != iter) {      // no procesado en esta iteración
+            n->tpc = t(root, n);     // tipo(root, n)
+
+            printf("  Vecino directo: nodo %d, tipo de arco: %d\n", n->id, n->tpc);
 
             if (n->tpc == 1) n1++;
             if (n->tpc == 2) n2++;
             if (n->tpc == 3) n3++;
 
-            n->p = s;
+            n->p = root;
+            n->iter = iter;
             Q_insert(q, n);
         }
     }
-    printf("%i\n",n1);
-    printf("%i\n",n2);
-    printf("%i\n",n3);
 
-    // 3) S.t(x,0,y) combinatorias iniciales
+    printf("  Resumen vecinos: tipo1=%d, tipo2=%d, tipo3=%d\n", n1, n2, n3);
+
+    // 3) Calcular combinatorias iniciales S.t(x,0,y)
     int t11 = comb(n1, 2);
     int t22 = comb(n2, 2);
     int t33 = comb(n3, 2);
+    int t12 = comb(n1 + n2, 2) - t11 - t22;
+    int t13 = comb(n1 + n3, 2) - t11 - t33;
+    int t23 = comb(n2 + n3, 2) - t22 - t33;
 
-    s->t[1][0][1] = t11;
-    s->t[2][0][2] = t22;
-    s->t[3][0][3] = t33;
+    root->t[1][0][1] = t11;
+    root->t[2][0][2] = t22;
+    root->t[3][0][3] = t33;
+    root->t[1][0][2] = t12;
+    root->t[1][0][3] = t13;
+    root->t[2][0][3] = t23;
 
-    s->t[1][0][2] = comb(n1 + n2, 2) - t11 - t22;
-    s->t[1][0][3] = comb(n1 + n3, 2) - t11 - t33;
-    s->t[2][0][3] = comb(n2 + n3, 2) - t22 - t33;
-
-
-
+    printf("  Combinaciones iniciales:\n");
+    printf("    C(n1,2)=%d [1-0-1], C(n2,2)=%d [2-0-2], C(n3,2)=%d [3-0-3]\n", t11, t22, t33);
+    printf("    [1-0-2]=%d, [1-0-3]=%d, [2-0-3]=%d\n", t12, t13, t23);
 
     // 4) Recorrido BFS y correcciones
+    printf("  Procesando vecinos en BFS:\n");
     while (!Q_vacia(q)) {
+        current_node = Q_pop(q);
+        current_node->color = 1;             // ahora es rojo (procesado)
 
-        s = Q_pop(q);
-        s->iter = iter;
-        s->color = 1;             // ahora es rojo
-
-        for (adj = s->adj; adj != NULL; adj = adj->next) {
-
+        for (adj = current_node->adj; adj != NULL; adj = adj->next) {
             Node* n = adj->dest;
 
-            if (n->color != 1 && n->iter != iter) {
+            if (n->iter != iter) {
+                n->iter = iter;
+                int arc_type = t(current_node, n);
 
-                if (n->p == s->p) {
-
-                    // caso igual
-                    s->p->t[s->tpc][0][n->tpc]--;
-                    s->p->t[s->tpc][ t(s,n) ][n->tpc]++;
-
+                if (n->p == current_node->p) {
+                    // Caso: mismo padre
+                    printf("    Nodo %d -> %d (tipo %d): mismo padre que %d\n", 
+                           current_node->id, n->id, arc_type, current_node->id);
+                    current_node->p->t[current_node->tpc][0][n->tpc]--;
+                    current_node->p->t[current_node->tpc][arc_type][n->tpc]++;
                 } else {
-
-                    // caso distinto
-                    s->p->t[s->tpc][ t(s,n) ][0]++;
+                    // Caso: distinto padre
+                    printf("    Nodo %d -> %d (tipo %d): padre diferente\n", 
+                           current_node->id, n->id, arc_type);
+                    current_node->p->t[current_node->tpc][arc_type][0]++;
                 }
+                n->p = current_node;
+                n->tpc = arc_type;
+                Q_insert(q, n);
             }
         }
     }
@@ -217,21 +262,25 @@ int main() {
 
     FILE* f = fopen(nombreArchivo, "r");
     if (!f) {
-        printf("No se pudo abrir el archivo '%s'\n", nombreArchivo);
+        printf("Error: No se pudo abrir el archivo '%s'\n", nombreArchivo);
         return 1;
     }
 
     int num_nodos, num_aristas;
     fscanf(f, "%d %d", &num_nodos, &num_aristas);
 
+    printf("\nGrafo cargado exitosamente:\n");
+    printf("  Nodos: %d\n", num_nodos);
+    printf("  Aristas: %d\n\n", num_aristas);
+
     Graph G;
     G.num_nodos = num_nodos;
     G.nodos = (Node**)malloc(sizeof(Node*) * num_nodos);
     tipoArco = malloc((num_nodos + 1) * sizeof(int*));
-    for (i = 1; i <= num_nodos; i++) {
+    
+    for (i = 0; i <= num_nodos; i++) {
         tipoArco[i] = calloc(num_nodos + 1, sizeof(int));
     }
-
 
     for (i = 0; i < num_nodos; i++) {
         G.nodos[i] = (Node*)malloc(sizeof(Node));
@@ -241,23 +290,27 @@ int main() {
         G.nodos[i]->tpc = 0;
         G.nodos[i]->p = NULL;
         G.nodos[i]->adj = NULL;
-
-
+        memset(G.nodos[i]->t, 0, sizeof(G.nodos[i]->t));
     }
 
+    printf("Leyendo aristas...\n");
     for (i = 0; i < num_aristas; i++) {
         int origen, destino, tipo;
         fscanf(f, "%d %d %d", &origen, &destino, &tipo);
 
-
-        tipoArco[origen][destino] = tipo;
-        agregarArista(G.nodos[origen - 1], G.nodos[destino - 1]);
+        if (origen > 0 && origen <= num_nodos && destino > 0 && destino <= num_nodos) {
+            tipoArco[origen][destino] = tipo;
+            agregarArista(G.nodos[origen - 1], G.nodos[destino - 1]);
+            printf("  Arista %d -> %d (tipo %d)\n", origen, destino, tipo);
+        } else {
+            printf("  Error: Arista inválida %d -> %d\n", origen, destino);
+        }
     }
     fclose(f);
 
     search_motif_driver(&G);
 
-
+    // Liberar memoria
     for (i = 0; i < G.num_nodos; i++) {
         AdjNode* adj = G.nodos[i]->adj;
         while (adj != NULL) {
@@ -268,7 +321,13 @@ int main() {
         free(G.nodos[i]);
     }
     free(G.nodos);
+    
+    for (i = 0; i <= num_nodos; i++) {
+        free(tipoArco[i]);
+    }
+    free(tipoArco);
 
+    printf("\nPrograma finalizado.\n");
     return 0;
 }
 
