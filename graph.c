@@ -120,29 +120,55 @@ void search_motif(Graph* G, Node* s, int iter);
 // Función para imprimir la matriz de combinaciones de un nodo
 void imprimir_combinaciones(Node* n) {
     printf("\n  Matriz t[x][y][z] para nodo %d:\n", n->id);
-    int x, y, z;
-    for (x = 1; x < 4; x++) {
-        for (y = 0; y < 4; y++) {
-            for (z = 1; z < 4; z++) {
-                if (n->t[x][y][z] > 0) {
-                    printf("    t[%d][%d][%d] = %d\n", x, y, z, n->t[x][y][z]);
-                }
-            }
+    int valores[6][3] = {
+        {1, 0, 1},
+        {2, 0, 2},
+        {3, 0, 3},
+        {1, 0, 2},
+        {1, 0, 3},
+        {2, 0, 3}
+    };
+    
+    for (int i = 0; i < 6; i++) {
+        int x = valores[i][0];
+        int y = valores[i][1];
+        int z = valores[i][2];
+        if (n->t[x][y][z] > 0) {
+            printf("    t[%d][%d][%d] = %d\n", x, y, z, n->t[x][y][z]);
         }
     }
+}
+
+// Función para contar el total de motifs en todos los nodos
+int contar_motifs_totales(Graph* G) {
+    int total = 0;
+    int valores[6][3] = {
+        {1, 0, 1},
+        {2, 0, 2},
+        {3, 0, 3},
+        {1, 0, 2},
+        {1, 0, 3},
+        {2, 0, 3}
+    };
+    
+    for (int i = 0; i < G->num_nodos; i++) {
+        for (int j = 0; j < 6; j++) {
+            int x = valores[j][0];
+            int y = valores[j][1];
+            int z = valores[j][2];
+            total += G->nodos[i]->t[x][y][z];
+        }
+    }
+    return total;
 }
 
 void search_motif_driver(Graph* G) {
     int iter = 1;
     int i, j;
-    printf("========================================\n");
-    printf("INICIANDO BÚSQUEDA DE MOTIFS\n");
-    printf("========================================\n");
     
     for (i = 0; i < G->num_nodos; i++) {
-        // Reset de iteración para todos los nodos
+        // Reset colors antes de cada búsqueda
         for (j = 0; j < G->num_nodos; j++) {
-            G->nodos[j]->iter = 0;
             G->nodos[j]->color = 0;
         }
         search_motif(G, G->nodos[i], iter);
@@ -157,90 +183,72 @@ void search_motif_driver(Graph* G) {
     for (i = 0; i < G->num_nodos; i++) {
         imprimir_combinaciones(G->nodos[i]);
     }
+    
+    // Contar y mostrar total de motifs
+    int total_motifs = contar_motifs_totales(G);
+    printf("\n========================================\n");
+    printf("TOTAL DE MOTIFS ENCONTRADOS: %d\n", total_motifs);
+    printf("========================================\n");
 }
 
 void search_motif(Graph* G, Node* root, int iter) {
 
     // 1) Inicializar
-    memset(root->t, 0, sizeof(root->t));
-    Q* q = crearQ();
+    memset(root->t, 0, sizeof(root->t));  // Limpiar matriz de combinaciones
     root->p = NULL;
     root->color = 1;     // rojo (visitado)
-    root->iter = iter;
 
     int n1 = 0, n2 = 0, n3 = 0;
     AdjNode* adj;
     Node* current_node;
-
-    printf("\n=== Búsqueda desde nodo %d ===\n", root->id);
+    Q* q = crearQ();
 
     // 2) Primera pasada: procesar sucesores directos de root
     for (adj = root->adj; adj != NULL; adj = adj->next) {
         Node* n = adj->dest;
 
-        if (n->iter != iter) {      // no procesado en esta iteración
+        if (n->color != 1) {      // no rojo
             n->tpc = t(root, n);     // tipo(root, n)
-
-            printf("  Vecino directo: nodo %d, tipo de arco: %d\n", n->id, n->tpc);
 
             if (n->tpc == 1) n1++;
             if (n->tpc == 2) n2++;
             if (n->tpc == 3) n3++;
 
             n->p = root;
-            n->iter = iter;
             Q_insert(q, n);
         }
     }
 
-    printf("  Resumen vecinos: tipo1=%d, tipo2=%d, tipo3=%d\n", n1, n2, n3);
-
     // 3) Calcular combinatorias iniciales S.t(x,0,y)
-    int t11 = comb(n1, 2);
-    int t22 = comb(n2, 2);
-    int t33 = comb(n3, 2);
-    int t12 = comb(n1 + n2, 2) - t11 - t22;
-    int t13 = comb(n1 + n3, 2) - t11 - t33;
-    int t23 = comb(n2 + n3, 2) - t22 - t33;
-
-    root->t[1][0][1] = t11;
-    root->t[2][0][2] = t22;
-    root->t[3][0][3] = t33;
-    root->t[1][0][2] = t12;
-    root->t[1][0][3] = t13;
-    root->t[2][0][3] = t23;
-
-    printf("  Combinaciones iniciales:\n");
-    printf("    C(n1,2)=%d [1-0-1], C(n2,2)=%d [2-0-2], C(n3,2)=%d [3-0-3]\n", t11, t22, t33);
-    printf("    [1-0-2]=%d, [1-0-3]=%d, [2-0-3]=%d\n", t12, t13, t23);
+    root->t[1][0][1] = comb(n1, 2);
+    root->t[2][0][2] = comb(n2, 2);
+    root->t[3][0][3] = comb(n3, 2);
+    root->t[1][0][2] = comb(n1 + n2, 2) - root->t[1][0][1] - root->t[2][0][2];
+    root->t[1][0][3] = comb(n1 + n3, 2) - root->t[1][0][1] - root->t[3][0][3];
+    root->t[2][0][3] = comb(n2 + n3, 2) - root->t[2][0][2] - root->t[3][0][3];
 
     // 4) Recorrido BFS y correcciones
-    printf("  Procesando vecinos en BFS:\n");
     while (!Q_vacia(q)) {
         current_node = Q_pop(q);
-        current_node->color = 1;             // ahora es rojo (procesado)
+        current_node->color = 1;       // marcar como rojo
+        current_node->iter = iter;     // marcar con esta iteración
 
         for (adj = current_node->adj; adj != NULL; adj = adj->next) {
             Node* n = adj->dest;
 
-            if (n->iter != iter) {
-                n->iter = iter;
-                int arc_type = t(current_node, n);
-
+            if (n->color != 1 && n->iter != iter) {
                 if (n->p == current_node->p) {
                     // Caso: mismo padre
-                    printf("    Nodo %d -> %d (tipo %d): mismo padre que %d\n", 
-                           current_node->id, n->id, arc_type, current_node->id);
                     current_node->p->t[current_node->tpc][0][n->tpc]--;
-                    current_node->p->t[current_node->tpc][arc_type][n->tpc]++;
+                    current_node->p->t[current_node->tpc][t(current_node, n)][n->tpc]++;
                 } else {
                     // Caso: distinto padre
-                    printf("    Nodo %d -> %d (tipo %d): padre diferente\n", 
-                           current_node->id, n->id, arc_type);
-                    current_node->p->t[current_node->tpc][arc_type][0]++;
+                    current_node->p->t[current_node->tpc][t(current_node, n)][0]++;
                 }
+                
                 n->p = current_node;
-                n->tpc = arc_type;
+                n->color = 1;
+                n->iter = iter;
                 Q_insert(q, n);
             }
         }
