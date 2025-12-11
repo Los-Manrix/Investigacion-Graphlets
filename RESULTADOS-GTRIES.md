@@ -112,3 +112,37 @@
 *   **Tiempo Total:** 91.84 segundos
 
 ---
+
+## Ejecución: TFLink_Homo_sapiens_interactions_LS (Motif Size 3)
+
+**Comando:** `./gtrieScanner -s 3 -m esu -g networks/FLink_Homo_sapiens_interactions_LS_simpleFormat_v1.0.tsv.txt -d`
+### Estadísticas de la Red
+*   **Nodos:** 20,128
+*   **Aristas (Conexiones):** 6,722,146
+*   **Grado Máximo:** 19,235
+
+### Resultados
+*   **Subgrafos Totales:** En ejecución (no disponible)
+*   **Motifs:** En ejecución (no disponible)
+*   **Tiempo Total:** En ejecución (>1 hora al momento del registro)
+
+---
+
+## Ejecución: TFLink_Mus_musculus_interactions_LS (Motif Size 3)
+
+**Comando:** `./gtrieScanner -s 3 -m esu -g networks/TFLink_Mus_musculus_interactions_LS_simpleFormat_v1.0.tsv.txt -d`
+
+
+
+### Estadísticas de la Red
+*   **Nodos:** 21,338
+*   **Aristas (Conexiones):** 4,048,589
+*   **Grado Máximo:** 19,091
+
+### Resultados
+*   **Subgrafos Totales:** En ejecución (no disponible)
+*   **Motifs:** En ejecución (no disponible)
+*   **Tiempo Total:** En ejecución (>1 hora al momento del registro)
+
+---
+
