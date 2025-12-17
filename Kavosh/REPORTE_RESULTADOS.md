@@ -1,6 +1,68 @@
 # Reporte de Resultados: Kavosh
 
-Nota: en este reporte llamamos "hub" a un nodo con grado muy alto (muchas conexiones). Los hubs suelen ser puntos centrales en la red que facilitan la difusión y mantienen la conectividad; su presencia afecta la estructura y la distribución de motifs.
+## Ejecución: 6nodos (Motif Size 3)
+
+**Comando:** `./Kavosh -i networks/6nodos.txt -s 3`
+
+### Estadísticas de la Red
+*   **Nodos:** 6
+*   **Aristas (Conexiones):** 8
+*   **Grado Máximo:** 4
+
+### Resultados
+*   **Subgrafos Totales:** 9
+*   **Motifs:** 3
+*   **Tiempo Total:** 0.000073 segundos
+
+---
+
+## Ejecución: 12nodos_grafo_doble (Motif Size 3)
+
+**Comando:** `./Kavosh -i networks/12nodos_grafo_doble.txt -s 3`
+
+### Estadísticas de la Red
+*   **Nodos:** 12
+*   **Aristas (Conexiones):** 17
+*   **Grado Máximo:** 4
+
+### Resultados
+*   **Subgrafos Totales:** 22
+*   **Motifs:** 4
+*   **Tiempo Total:** 0.000176 segundos
+
+---
+
+## Ejecución: 15nodos_Estrella_HaciaAfuera (Motif Size 3)
+
+**Comando:** `./Kavosh -i networks/15nodos_Estrella_HaciaAfuera.txt -s 3`
+
+### Estadísticas de la Red
+*   **Nodos:** 15
+*   **Aristas (Conexiones):** 14
+*   **Grado Máximo:** 14
+
+### Resultados
+*   **Subgrafos Totales:** 91
+*   **Motifs:** 1
+*   **Tiempo Total:** 0.000121 segundos
+
+---
+
+## Ejecución: 15nodos_Estrella_Desordenado (Motif Size 3)
+
+**Comando:** `./Kavosh -i networks/15nodos_Estrella_Desordenado.txt -s 3`
+
+### Estadísticas de la Red
+*   **Nodos:** 15
+*   **Aristas (Conexiones):** 17
+*   **Grado Máximo:** 14
+
+### Resultados
+*   **Subgrafos Totales:** 91
+*   **Motifs:** 6
+*   **Tiempo Total:** 0.000114 segundos
+
+---
 
 ## Ejecución: TCGA-BRCA-elbow-GRN (Motif Size 3)
 
@@ -10,8 +72,6 @@ Nota: en este reporte llamamos "hub" a un nodo con grado muy alto (muchas conexi
 *   **Nodos:** 19,251
 *   **Aristas (Conexiones):** 322,840
 *   **Grado Máximo:** 5,096
-*   **Distribución de Grados:** La red tiene nodos altamente conectados (hubs) y muchos con pocas conexiones.
-    *   *(El **Grado** indica cuántas conexiones tiene un nodo. Por ejemplo, hay 43 nodos con solo 1 conexión, mientras que un nodo tiene 5096 conexiones).*
 
 ### Resultados
 *   **Subgrafos Totales:** 152,654,393
@@ -28,8 +88,6 @@ Nota: en este reporte llamamos "hub" a un nodo con grado muy alto (muchas conexi
 *   **Nodos:** 19,249
 *   **Aristas (Conexiones):** 339,136
 *   **Grado Máximo:** 2,476
-*   **Distribución de Grados:** Similar a la anterior, con hubs importantes (grado máx 2476) y muchos nodos de bajo grado.
-    *   *(Ejemplo: 44 nodos con grado 1, 247 con grado 2).*
 
 ### Resultados
 *   **Subgrafos Totales:** 129,007,119
@@ -46,7 +104,6 @@ Nota: en este reporte llamamos "hub" a un nodo con grado muy alto (muchas conexi
 *   **Nodos:** 16,529
 *   **Aristas (Conexiones):** 315,827
 *   **Grado Máximo:** 7,719
-*   **Distribución de Grados:** Muchos nodos con grado bajo y algunos hubs; por ejemplo, 2,914 nodos con grado 1.
 
 ### Resultados
 *   **Subgrafos Totales:** 553,828,787
@@ -63,7 +120,6 @@ Nota: en este reporte llamamos "hub" a un nodo con grado muy alto (muchas conexi
 *   **Nodos:** 13,773
 *   **Aristas (Conexiones):** 25,955
 *   **Grado Máximo:** 9,026
-*   **Distribución de Grados:** Muchísimos nodos con grado 1 (6,448); hay pocos hubs con grado muy alto (ej. grado máximo 9,026).
 
 ### Resultados
 *   **Subgrafos Totales:** 65,793,468
@@ -80,7 +136,6 @@ Nota: en este reporte llamamos "hub" a un nodo con grado muy alto (muchas conexi
 *   **Nodos:** 18,766
 *   **Aristas (Conexiones):** 367,875
 *   **Grado Máximo:** 12,717
-*   **Distribución de Grados:** Muchos nodos con bajo grado y algunos hubs extremos (grado máximo 12,717).
 
 ### Resultados
 *   **Subgrafos Totales:** 1,140,552,890
@@ -99,7 +154,6 @@ Nota: en este reporte llamamos "hub" a un nodo con grado muy alto (muchas conexi
 *   **Nodos:** 13,546
 *   **Aristas (Conexiones):** 81,215
 *   **Grado Máximo:** 9,565
-*   **Distribución de Grados:** Muchos nodos de bajo grado y algunos hubs; grado máximo 9,565.
 
 ### Resultados
 *   **Subgrafos Totales:** 261,052,796
@@ -116,7 +170,6 @@ Nota: en este reporte llamamos "hub" a un nodo con grado muy alto (muchas conexi
 *   **Nodos:** 6,555
 *   **Aristas (Conexiones):** 232,250
 *   **Grado Máximo:** 5,478
-*   **Distribución de Grados:** Muchos nodos con grado bajo y algunos hubs (grado máximo 5,478).
 
 ### Resultados
 *   **Subgrafos Totales:** 253,562,168
@@ -133,7 +186,6 @@ Nota: en este reporte llamamos "hub" a un nodo con grado muy alto (muchas conexi
 *   **Nodos:** 20,128
 *   **Aristas (Conexiones):** 6,722,146
 *   **Grado Máximo:** 19,235
-*   **Distribución de Grados:** Red muy grande con muchos nodos de bajo grado y algunos hubs de grado extremo.
 
 ### Resultados
 *   **Subgrafos Totales:** En ejecución (no disponible)
@@ -150,7 +202,6 @@ Nota: en este reporte llamamos "hub" a un nodo con grado muy alto (muchas conexi
 *   **Nodos:** 21,338
 *   **Aristas (Conexiones):** 4,048,589
 *   **Grado Máximo:** 19,091
-*   **Distribución de Grados:** Red grande con muchos nodos de bajo grado y algunos hubs extremos.
 
 ### Resultados
 *   **Subgrafos Totales:** En ejecución (no disponible)

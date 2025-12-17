@@ -1,0 +1,52 @@
+gtrieScanner Results
+------------------------------------------
+General Information
+
+Start of Computation: 17h00m03s 17/12/2025
+End of Computation: 17h00m03s 17/12/2025
+
+Subgraph Size: 3
+Graph File: "networks/15nodos_Estrella_Desordenado_converted.txt"
+Directed: YES
+Nr Nodes: 15
+Nr Edges: 17
+
+Method: ESU on original network
+Different Types of Subgraphs Found [Original Network]: 6
+Subgraph Occurrences Found [Original Network]: 91
+Time for computing census on original network: 0.000037s
+Average time for census on random network: 0.000000s
+
+Number of random networks: 0
+Random seed: 1766001603
+Exchanges per edge: 3
+Number of tries per exchange: 10
+------------------------------------------
+Motif Analysis Results
+
+Graph   Org_Freq |  Z-score |    Rnd_Avg +/-    Rnd_Dev
+
+011
+000
+000           28 |     0.00 |       0.00 +/-       0.00
+
+001
+100
+000           24 |     0.00 |       0.00 +/-       0.00
+
+011
+100
+000           24 |     0.00 |       0.00 +/-       0.00
+
+010
+100
+100            9 |     0.00 |       0.00 +/-       0.00
+
+000
+100
+100            3 |     0.00 |       0.00 +/-       0.00
+
+011
+100
+100            3 |     0.00 |       0.00 +/-       0.00
+

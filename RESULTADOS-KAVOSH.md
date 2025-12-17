@@ -1,5 +1,69 @@
 # Reporte de Resultados: Kavosh
 
+## Ejecución: 6nodos (Motif Size 3)
+
+**Comando:** `./Kavosh -i networks/6nodos.txt -s 3`
+
+### Estadísticas de la Red
+*   **Nodos:** 6
+*   **Aristas (Conexiones):** 8
+*   **Grado Máximo:** 4
+
+### Resultados
+*   **Subgrafos Totales:** 9
+*   **Motifs:** 3
+*   **Tiempo Total:** 0.000073 segundos
+
+---
+
+## Ejecución: 12nodos_grafo_doble (Motif Size 3)
+
+**Comando:** `./Kavosh -i networks/12nodos_grafo_doble.txt -s 3`
+
+### Estadísticas de la Red
+*   **Nodos:** 12
+*   **Aristas (Conexiones):** 17
+*   **Grado Máximo:** 4
+
+### Resultados
+*   **Subgrafos Totales:** 22
+*   **Motifs:** 4
+*   **Tiempo Total:** 0.000176 segundos
+
+---
+
+## Ejecución: 15nodos_Estrella_HaciaAfuera (Motif Size 3)
+
+**Comando:** `./Kavosh -i networks/15nodos_Estrella_HaciaAfuera.txt -s 3`
+
+### Estadísticas de la Red
+*   **Nodos:** 15
+*   **Aristas (Conexiones):** 14
+*   **Grado Máximo:** 14
+
+### Resultados
+*   **Subgrafos Totales:** 91
+*   **Motifs:** 1
+*   **Tiempo Total:** 0.000121 segundos
+
+---
+
+## Ejecución: 15nodos_Estrella_Desordenado (Motif Size 3)
+
+**Comando:** `./Kavosh -i networks/15nodos_Estrella_Desordenado.txt -s 3`
+
+### Estadísticas de la Red
+*   **Nodos:** 15
+*   **Aristas (Conexiones):** 17
+*   **Grado Máximo:** 14
+
+### Resultados
+*   **Subgrafos Totales:** 91
+*   **Motifs:** 6
+*   **Tiempo Total:** 0.000114 segundos
+
+---
+
 ## Ejecución: TCGA-BRCA-elbow-GRN (Motif Size 3)
 
 **Comando:** `./Kavosh -i networks/TCGA-BRCA-elbow-GRN.txt -s 3`

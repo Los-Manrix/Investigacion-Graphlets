@@ -1,5 +1,69 @@
 # Reporte de Resultados: gtrieScanner
 
+## Ejecución: 6nodos_converted (Motif Size 3)
+
+**Comando:** `./gtrieScanner -s 3 -m esu -g networks/6nodos_converted.txt -d`
+
+### Estadísticas de la Red
+*   **Nodos:** 6
+*   **Aristas (Conexiones):** 8
+*   **Grado Máximo:** 4
+
+### Resultados
+*   **Subgrafos Totales:** 9
+*   **Motifs:** 3
+*   **Tiempo Total:** 0.000012 segundos
+
+---
+
+## Ejecución: 12nodos_grafo_doble_converted (Motif Size 3)
+
+**Comando:** `./gtrieScanner -s 3 -m esu -g networks/12nodos_grafo_doble_converted.txt -d`
+
+### Estadísticas de la Red
+*   **Nodos:** 12
+*   **Aristas (Conexiones):** 17
+*   **Grado Máximo:** 4
+
+### Resultados
+*   **Subgrafos Totales:** 22
+*   **Motifs:** 4
+*   **Tiempo Total:** 0.000017 segundos
+
+---
+
+## Ejecución: 15nodos_Estrella_HaciaAfuera_converted (Motif Size 3)
+
+**Comando:** `./gtrieScanner -s 3 -m esu -g networks/15nodos_Estrella_HaciaAfuera_converted.txt -d`
+
+### Estadísticas de la Red
+*   **Nodos:** 15
+*   **Aristas (Conexiones):** 14
+*   **Grado Máximo:** 14
+
+### Resultados
+*   **Subgrafos Totales:** 91
+*   **Motifs:** 1
+*   **Tiempo Total:** 0.000036 segundos
+
+---
+
+## Ejecución: 15nodos_Estrella_Desordenado_converted (Motif Size 3)
+
+**Comando:** `./gtrieScanner -s 3 -m esu -g networks/15nodos_Estrella_Desordenado_converted.txt -d`
+
+### Estadísticas de la Red
+*   **Nodos:** 15
+*   **Aristas (Conexiones):** 17
+*   **Grado Máximo:** 17
+
+### Resultados
+*   **Subgrafos Totales:** 91
+*   **Motifs:** 6
+*   **Tiempo Total:** 0.000040 segundos
+
+---
+
 ## Ejecución: TCGA-BRCA-elbow-GRN_converted (Motif Size 3)
 
 **Comando:** `./gtrieScanner -s 3 -m esu -g networks/TCGA-BRCA-elbow-GRN_converted.txt -d`
