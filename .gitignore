@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Compilados
+*.o
+*.out
+*.exe
+Kavosh/Kavosh
+gtrieScanner_src_01/gtrieScanner
+
+# Resultados temporales
+*.tmp
+*.log
+console_output.txt
+cp.txt
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Git LFS
+.git/lfs/
+
+# Archivos grandes (manejados por LFS)
+*.tsv
+TOYS/FormatoP/*.txt
