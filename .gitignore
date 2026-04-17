@@ -1,0 +1,58 @@
+# Credentials
+credenciales.json
+token.json
+contraseña.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+*.zip
+
+# Reports
+*.xlsx
+*.csv
+*.xls
+
+
+# System
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.env
+.cache/
+
+# Temp files
+*.tmp
+*.temp
+*.log
+debug.log
+
+DATA/
+.venv/
+DATA/
